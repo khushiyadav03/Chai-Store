@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ chai.name }} | Chai.
+{% endblock %}
+
+{% block content %}
+<section class="chai-page detail-layout">
+    <div class="detail-image-card">
+        <img class="detail-image" src="{{ chai.image.url }}" alt="{{ chai.name }}">
+    </div>
+    <div class="detail-copy">
+        <p class="chai-kicker">{{ chai.get_type_display }}</p>
+        <h1 class="chai-title">{{ chai.name }}</h1>
+        <p class="chai-intro">{{ chai.description|default:"A comforting chai from the house collection." }}</p>
+        <div class="detail-meta">
+            <p><strong>Added:</strong> {{ chai.date_added|date:"M d, Y" }}</p>
+            {% if certificate %}
+            <p><strong>Certificate:</strong> {{ certificate.certificate_num }}</p>
+            {% endif %}
+            <p><strong>Stores:</strong>
+                {% for store in chai.stores.all %}
+                    {{ store.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Not linked yet.
+                {% endfor %}
+            </p>
+        </div>
+        <a class="button-primary button-inline" href="{% url 'menu' %}">Back to Menu</a>
+    </div>
+</section>
+{% endblock %}

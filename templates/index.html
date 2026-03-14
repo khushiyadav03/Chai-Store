@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Home | Chai.
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-copy">
+        <p class="chai-kicker">Premium Tea Outlet</p>
+        <h1 class="hero-title">{{ hero_tagline }}</h1>
+        <p class="hero-text">
+            Slow-steeped chai, polished service, and a calm modern atmosphere built around daily ritual.
+        </p>
+        <div class="hero-actions">
+            <a class="button-primary" href="{% url 'menu' %}">{{ hero_cta_primary }}</a>
+            <a class="button-secondary" href="{% url 'chai_stores' %}">{{ hero_cta_secondary }}</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="img-animated hero-image-frame">
+            <img
+                src="{% static 'website_images/home-hero.png' %}"
+                alt="Steaming chai in a clay cup"
+                class="hero-image"
+            >
+            <span class="steam steam-one"></span>
+            <span class="steam steam-two"></span>
+            <span class="steam steam-three"></span>
+        </div>
+    </div>
+</section>
+
+<section class="content-section brand-story">
+    <div class="story-layout">
+        <div>
+            <div class="section-heading">
+                <p class="chai-kicker">Our Story</p>
+                <h2 class="section-title">A tea ritual shaped for slow mornings and warm conversations.</h2>
+            </div>
+            <p class="section-text">{{ about_text }}</p>
+        </div>
+        <div class="img-animated story-image-frame">
+            <img src="{% static 'website_images/about-section.png' %}" alt="Hands holding a warm cup of chai">
+        </div>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="section-heading">
+        <p class="chai-kicker">Why Chai?</p>
+        <h2 class="section-title">The details behind every cup.</h2>
+    </div>
+    <div class="feature-grid">
+        <article class="feature-card">
+            <div class="icon-badge">FI</div>
+            <h3>Fresh Ingredients</h3>
+            <p>Whole spices, dairy selected for balance, and ingredients prepared in small batches.</p>
+        </article>
+        <article class="feature-card">
+            <div class="icon-badge">SB</div>
+            <h3>Signature Blends</h3>
+            <p>Classic and house blends built for comfort, depth, and a clean finish.</p>
+        </article>
+        <article class="feature-card">
+            <div class="icon-badge">NA</div>
+            <h3>100% Natural</h3>
+            <p>No shortcuts in flavor. Just warm spice, tea leaves, and careful brewing.</p>
+        </article>
+    </div>
+</section>
+
+<section class="content-section menu-preview">
+    <div class="section-heading split-heading">
+        <div>
+            <p class="chai-kicker">Featured Menu</p>
+            <h2 class="section-title">A preview of the blends people come back for.</h2>
+        </div>
+        <a class="text-link" href="{% url 'menu' %}">Browse full menu</a>
+    </div>
+    <div class="chai-grid">
+        {% for item in featured_items %}
+        <article class="chai-card">
+            <div class="chai-image-wrap">
+                <img class="chai-image" src="{{ item.image.url }}" alt="{{ item.name }}">
+            </div>
+            <div class="chai-card-body">
+                <div class="menu-meta">
+                    <p class="chai-label">{{ item.category }}</p>
+                    {% if item.tag %}<span class="menu-tag">{{ item.tag }}</span>{% endif %}
+                </div>
+                <h3 class="chai-name">{{ item.name }}</h3>
+                <p class="chai-copy">{{ item.description }}</p>
+                <p class="price-pill">Rs. {{ item.price }}</p>
+            </div>
+        </article>
+        {% empty %}
+        <div class="chai-empty">
+            <h2>No menu items added yet.</h2>
+            <p>Add a few items from the admin panel to populate the homepage preview.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-section testimonial-strip">
+    <div class="section-heading">
+        <p class="chai-kicker">Testimonials</p>
+        <h2 class="section-title">What customers remember after the first sip.</h2>
+    </div>
+    <div class="testimonial-row">
+        {% for testimonial in testimonials %}
+        <article class="testimonial-card">
+            <div class="testimonial-head">
+                {% if testimonial.avatar %}
+                <img class="testimonial-avatar" src="{{ testimonial.avatar.url }}" alt="{{ testimonial.customer_name }}">
+                {% else %}
+                <div class="testimonial-avatar placeholder-avatar">{{ testimonial.customer_name|first }}</div>
+                {% endif %}
+                <div>
+                    <h3>{{ testimonial.customer_name }}</h3>
+                    <p class="rating-text">{{ testimonial.rating }}/5</p>
+                </div>
+            </div>
+            <p class="testimonial-quote">"{{ testimonial.quote }}"</p>
+        </article>
+        {% empty %}
+        <div class="chai-empty">
+            <h2>No testimonials added yet.</h2>
+            <p>Add at least four testimonials from the admin panel to complete this section.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

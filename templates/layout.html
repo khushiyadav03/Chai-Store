@@ -1,0 +1,67 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        Default Value
+        {% endblock %}
+    </title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="site-shell">
+        <nav class="site-nav">
+            <a class="brand-mark" href="{% url 'home' %}">Chai.</a>
+            <div class="site-nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'menu' %}">Menu</a>
+                <a href="{% url 'chai_stores' %}">Stores</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <div>
+                <a class="brand-mark brand-mark-footer" href="{% url 'home' %}">Chai.</a>
+                <p class="footer-copy">Modern chai, warm rituals, and slow-brewed comfort.</p>
+            </div>
+            <div class="footer-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'menu' %}">Menu</a>
+                <a href="{% url 'chai_stores' %}">Stores</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </div>
+            <div class="footer-socials">
+                <a href="#" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2.2A2.8 2.8 0 0 0 4.2 7v10A2.8 2.8 0 0 0 7 19.8h10a2.8 2.8 0 0 0 2.8-2.8V7A2.8 2.8 0 0 0 17 4.2H7Zm10.25 1.65a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2.2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6Z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.75c0-.92.26-1.55 1.58-1.55H16.7V4.33c-.3-.04-1.31-.13-2.48-.13-2.46 0-4.14 1.5-4.14 4.25v2.35H7.3V14h2.78v8h3.42Z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21.6 7.2a2.95 2.95 0 0 0-2.08-2.09C17.7 4.6 12 4.6 12 4.6s-5.7 0-7.52.5A2.95 2.95 0 0 0 2.4 7.2 30.9 30.9 0 0 0 2 12a30.9 30.9 0 0 0 .4 4.8 2.95 2.95 0 0 0 2.08 2.09c1.82.5 7.52.5 7.52.5s5.7 0 7.52-.5a2.95 2.95 0 0 0 2.08-2.09A30.9 30.9 0 0 0 22 12a30.9 30.9 0 0 0-.4-4.8ZM10.1 15.2V8.8l5.52 3.2-5.52 3.2Z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <p class="site-footer-meta">Copyright {% now "Y" %} Chai. All rights reserved.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
