@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Menu | Chai.
+{% endblock %}
+
+{% block content %}
+<section class="page-hero page-hero-menu">
+    <div class="page-hero-copy">
+        <p class="chai-kicker">Menu</p>
+        <h1 class="chai-title">A calm menu of classics, masalas, cold pours, and house specials.</h1>
+        <p class="chai-intro">
+            Every cup is built on warmth, texture, and a clean finish. Filter the menu by category below.
+        </p>
+    </div>
+    <div class="img-animated menu-hero-image">
+        <img
+            src="{% static 'website_images/menu-banner.png' %}"
+            alt="Assorted chai served on a wooden table"
+        >
+    </div>
+</section>
+
+<section class="chai-page">
+    <div class="filter-toolbar" id="menu-filters">
+        <button class="filter-button is-active" type="button" data-filter="All">All</button>
+        {% for category in categories %}
+        <button class="filter-button" type="button" data-filter="{{ category }}">{{ category }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="chai-grid menu-grid" id="menu-grid">
+        {% for item in menu_items %}
+        <article class="chai-card menu-card" data-category="{{ item.category }}">
+            <div class="chai-image-wrap">
+                <img class="chai-image" src="{{ item.image.url }}" alt="{{ item.name }}">
+            </div>
+            <div class="chai-card-body">
+                <div class="menu-meta">
+                    <p class="chai-label">{{ item.category }}</p>
+                    {% if item.tag %}
+                    <span class="menu-tag">{{ item.tag }}</span>
+                    {% endif %}
+                </div>
+                <h2 class="chai-name">{{ item.name }}</h2>
+                <p class="chai-copy">{{ item.description }}</p>
+                <div class="menu-card-footer">
+                    <p class="price-pill">Rs. {{ item.price }}</p>
+                    <span class="availability-pill">{% if item.is_available %}Available{% else %}Sold out{% endif %}</span>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="chai-empty">
+            <h2>No menu items added yet.</h2>
+            <p>Use the admin panel to add menu items and category tags.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll("#menu-filters .filter-button");
+    const cards = document.querySelectorAll("#menu-grid .menu-card");
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const filter = this.dataset.filter;
+
+            buttons.forEach((btn) => btn.classList.remove("is-active"));
+            this.classList.add("is-active");
+
+            cards.forEach((card) => {
+                const matches = filter === "All" || card.dataset.category === filter;
+                card.style.display = matches ? "" : "none";
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

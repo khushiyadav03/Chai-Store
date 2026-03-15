@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Stores | Chai.
+{% endblock %}
+
+{% block content %}
+<section class="page-hero page-hero-store">
+    <div class="page-hero-copy">
+        <p class="chai-kicker">Stores</p>
+        <h1 class="chai-title">Find Your Nearest Chai.</h1>
+        <p class="chai-intro">
+            Visit one of our warm, modern outlets for classic brews, house specials, and calm service.
+        </p>
+    </div>
+    <div class="img-animated store-top-image">
+        <img src="{% static 'website_images/stores-top.png' %}" alt="Illustrated map pin with a steaming chai cup">
+    </div>
+</section>
+
+<section class="chai-page">
+    <div class="chai-grid store-grid">
+        {% for store in stores %}
+        <article class="chai-card store-card reveal-card">
+            <div class="chai-card-body">
+                <p class="chai-label">{{ store.city|default:"Store" }}</p>
+                <h2 class="chai-name">{{ store.name }}</h2>
+                <p class="chai-copy">{{ store.full_address }}</p>
+                <div class="store-meta">
+                    <p><strong>City:</strong> {{ store.city|default:"TBA" }}</p>
+                    <p><strong>Phone:</strong> {{ store.phone|default:"TBA" }}</p>
+                    <p><strong>Hours:</strong> {{ store.opening_hours|default:"TBA" }}</p>
+                </div>
+                <a class="button-primary button-inline" href="{{ store.google_maps_url|default:'#' }}" target="_blank" rel="noopener">
+                    Get Directions
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="chai-empty">
+            <h2>No stores added yet.</h2>
+            <p>Add store details in the admin panel to populate this page.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll(".reveal-card");
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    cards.forEach((card) => observer.observe(card));
+});
+</script>
+{% endblock %}

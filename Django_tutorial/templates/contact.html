@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Contact | Chai.
+{% endblock %}
+
+{% block content %}
+<section class="page-hero page-hero-contact">
+    <div class="page-hero-copy">
+        <p class="chai-kicker">Contact</p>
+        <h1 class="chai-title">Talk to the team behind the next warm pour.</h1>
+        <p class="chai-intro">
+            Reach out for everyday enquiries, partnerships, and larger tea service requests.
+        </p>
+    </div>
+    <div class="img-animated contact-hero-image">
+        <img
+            src="{% static 'website_images/contact-page.png' %}"
+            alt="Cozy chai shop interior"
+        >
+        <span class="steam steam-one"></span>
+        <span class="steam steam-two"></span>
+    </div>
+</section>
+
+<section class="contact-shell">
+    <div class="contact-grid">
+        <div class="form-card steam-bg">
+            <div class="section-heading">
+                <p class="chai-kicker">Send a Message</p>
+                <h2 class="section-title">We will get back with a clear answer.</h2>
+            </div>
+            <form id="contact-form" class="stack-form" action="{% url 'contact_message_submit' %}" method="post">
+                {% csrf_token %}
+                {{ contact_form.as_p }}
+                <button class="button-primary" type="submit">Submit</button>
+                <p class="form-status" id="contact-status" aria-live="polite"></p>
+            </form>
+        </div>
+        <aside class="info-card">
+            <div class="img-animated contact-info-image">
+                <img src="{% static 'website_images/Contact Page Image2.png' %}" alt="Warm chai brand interior detail">
+            </div>
+            <p class="chai-kicker">Brand Info</p>
+            <h2 class="section-title">Warmth in every detail.</h2>
+            <p class="section-text">
+                Chai. is a premium tea outlet shaped around calm service, balanced spice, and a modern everyday ritual.
+            </p>
+            <div class="info-list">
+                <p><strong>Email:</strong> hello@chai.example</p>
+                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Hours:</strong> 7:00 AM - 11:00 PM</p>
+            </div>
+        </aside>
+    </div>
+
+    <div class="form-card bulk-order-card steam-bg">
+        <div class="section-heading">
+            <p class="chai-kicker">Bulk Orders</p>
+            <h2 class="section-title">Place a Bulk Order</h2>
+        </div>
+        <p class="section-text">{{ bulk_order_note }}</p>
+        <form id="bulk-order-form" class="stack-form" action="{% url 'bulk_order_submit' %}" method="post">
+            {% csrf_token %}
+            {{ bulk_order_form.as_p }}
+            <button class="button-primary" type="submit">Send Request</button>
+            <p class="form-status" id="bulk-status" aria-live="polite"></p>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return parts.pop().split(";").shift();
+    }
+    return "";
+}
+
+async function bindAjaxForm(formId, statusId) {
+    const form = document.getElementById(formId);
+    const status = document.getElementById(statusId);
+    if (!form || !status) {
+        return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        status.textContent = "Sending...";
+        status.classList.remove("is-error", "is-success");
+
+        const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: new FormData(form),
+        });
+
+        const data = await response.json();
+        if (response.ok && data.ok) {
+            form.reset();
+            status.textContent = data.message;
+            status.classList.add("is-success");
+            return;
+        }
+
+        const errors = Object.values(data.errors || {}).flat().join(" ");
+        status.textContent = errors || "Something went wrong.";
+        status.classList.add("is-error");
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    bindAjaxForm("contact-form", "contact-status");
+    bindAjaxForm("bulk-order-form", "bulk-status");
+});
+</script>
+{% endblock %}
